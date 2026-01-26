@@ -59,11 +59,22 @@ export class TopBarNagivation extends BasePage {
     }
 
     async clickMenu(menu: 'Lịch Chiếu' | 'Cụm Rạp' | 'Tin Tức' | 'Ứng Dụng') {
-        switch (menu) {
-            case 'Lịch Chiếu': this.navigateLichChieu(); break;
-            case 'Cụm Rạp': this.navigateCumRap(); break;
-            case 'Tin Tức': this.navigateTinTuc(); break;
-            case 'Ứng Dụng': this.navigateUngDung(); break;
+    switch (menu) {
+        case 'Lịch Chiếu':
+            await this.navigateLichChieu();
+            break;
+
+        case 'Cụm Rạp':
+            await this.navigateCumRap();
+            break;
+
+        case 'Tin Tức':
+            await this.navigateTinTuc();
+            break;
+
+        case 'Ứng Dụng':
+            await this.navigateUngDung();
+            break;
         }
     }
 }

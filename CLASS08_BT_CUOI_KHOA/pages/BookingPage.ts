@@ -55,27 +55,35 @@ export class BookingPage extends CommonPage {
         return { name, cinema, time, seat };
     }
 
-    async selectRandomAvailableSeat() {
-        // Đợi ghế hiển thị
-        await this.page.waitForSelector('button.MuiButtonBase-root.MuiButton-root', { state: 'visible' });
-        // Lấy danh sách ghế có thể chọn
-        const availableSeats = this.page.locator(
-            'button.MuiButtonBase-root.MuiButton-root:not([disabled]):not(.Mui-disabled)'
-        );
-        const total = await availableSeats.count();
-        console.log(`Tổng ghế khả dụng: ${total}`);
+    // async selectRandomAvailableSeat() {
+    //     // Đợi ghế hiển thị
+    //     await this.page.waitForSelector('button.MuiButtonBase-root.MuiButton-root', { state: 'visible' });
+    //     // Lấy danh sách ghế có thể chọn
+    //     const availableSeats = this.page.locator(
+    //         'button.MuiButtonBase-root.MuiButton-root:not([disabled]):not(.Mui-disabled)'
+    //     );
+    //     const total = await availableSeats.count();
+    //     console.log(`Tổng ghế khả dụng: ${total}`);
 
-        if (total === 0) throw new Error('Không tìm thấy ghế nào khả dụng');
+    //     if (total === 0) throw new Error('Không tìm thấy ghế nào khả dụng');
 
-        // Random ghế
-        const randomIndex = Math.floor(Math.random() * total);
-        const randomSeat = availableSeats.nth(randomIndex);
-        const seatText = (await randomSeat.textContent())?.trim() || `(Ghế #${randomIndex})`;
-        console.log(`Chọn random ghế: ${seatText}`);
+    //     // Random ghế
+    //     const randomIndex = Math.floor(Math.random() * total);
+    //     const randomSeat = availableSeats.nth(randomIndex);
+    //     const seatText = (await randomSeat.textContent())?.trim() || `(Ghế #${randomIndex})`;
+    //     console.log(`Chọn random ghế: ${seatText}`);
 
-        await randomSeat.click();
-        return { seatText, randomIndex };
+    //     await randomSeat.click();
+    //     return { seatText, randomIndex };
+    // }
+    async selectFirstAvailableSeat() {
+    const availableSeats = this.page.locator('.seat:not(.seat-booked)' );
+    await expect(availableSeats.first()).toBeVisible();
+     const seatText = (await availableSeats.first().textContent())?.trim();
+     await availableSeats.first().click();
+    return { seatText };
     }
+
 
     async selectRandomSeats(min = 2, max = 3) {
         // Đợi ghế load xong

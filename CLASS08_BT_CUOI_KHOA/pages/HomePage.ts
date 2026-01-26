@@ -1,181 +1,88 @@
-import { Page, Locator, expect } from "@playwright/test";
-import { CommonPage } from "./CommonPage";
+import { Page, Locator, expect } from '@playwright/test';
+import { CommonPage } from './CommonPage';
 
 export class HomePage extends CommonPage {
-    private readonly btnPlay = this.page.getByRole('button', { name: 'video-button'});
-    private readonly ifrVideo = this.page.locator('iframe').contentFrame().locator('video');
-    private readonly ContainLichChieu = this.page.locator('#lichChieu');
-    private readonly ContainCumRap = this.page.locator('#cumRap');
-    private readonly ContainTinTuc = this.page.locator('//div[@id="tinTuc"]');
-    private readonly ContainUngDung = this.page.locator('#ungDung');
-    private readonly SelectMenuFilm = this.page.locator('select[name="film"]');
-    private readonly lblMsgFilm = this.page.getByText('Vui lòng chọn phim');
-    private readonly SelectMenuCinema = this.page.locator('select[name="cinema"]');
-    private readonly lblMsgCinema = this.page.getByText('Vui lòng chọn rạp');
-    private readonly SelectMenuDate = this.page.locator('select[name="date"]');
-    private readonly lblMsgDate = this.page.getByText('Vui lòng chọn ngày giờ chiếu');
-    private readonly btnBuyTicket = this.page.getByRole('button', { name: 'MUA VÉ NGAY' });
-    private readonly btnBuy = this.page.getByRole('link', { name: 'MUA VÉ', exact: true });
-    private readonly btnDaHieu = this.page.getByRole('button', { name: 'Đã hiểu' });
-    private readonly btnDangxuat = this.page.getByRole('link', { name: 'Đăng xuất' });
-    private readonly btnYesDangxuat = this.page.getByRole('button', { name: 'Đồng ý' });
-    private readonly btnNoDangxuat = this.page.getByRole('button', { name: 'Hủy' });
-    private readonly lblLogoutMsg = this.page.getByRole('heading', { name: 'Đã đăng xuất' });
-
-    constructor(page: Page) {
-        super(page);
-    }
-    getLblLogoutMsgLocator(): Locator {
-        return this.lblLogoutMsg;
-    }
-
-    async clickPlay() {
-        await this.click(this.btnPlay);
-    }
-
-    async getSelectFilm() {
-        await this.click(this.SelectMenuFilm);
-    }
-
-    async getSelectCinema() {
-        await this.click(this.SelectMenuCinema);
-    }
-
-    async getSelectDate() {
-        await this.click(this.SelectMenuDate);
-    }
-
-    async clickBuyTicket() {
-        await this.click(this.btnBuyTicket);
-    }
-
-    async clickDaHieu() {
-        await this.click(this.btnDaHieu);
-    }
-
-    async clickDangXuat() {
-        await this.click(this.btnDangxuat);
-    }
-
-    async clickYesDangXuat() {
-        await this.click(this.btnYesDangxuat);
-    }
 
 
-    async clickNoDangXuat() {
-        await this.click(this.btnNoDangxuat);
-    }
+  private readonly btnPlayTrailer: Locator;
+  private readonly iframeVideo: Locator;
 
+  private readonly sectionLichChieu: Locator;
+  private readonly sectionCumRap: Locator;
+  private readonly sectionTinTuc: Locator;
+  private readonly sectionUngDung: Locator;
 
-    async clickBuy() {
-        await this.click(this.btnBuy);
-    }
+  private readonly btnDaHieu: Locator;
+  private readonly btnDangXuat: Locator;
+  private readonly btnXacNhanDangXuat: Locator;
+  private readonly btnHuyDangXuat: Locator;
+  private readonly lblDaDangXuat: Locator;
 
-    async playTrailer() {
-         await this.page.getByAltText('video-button').click();
-         await this.page.locator('iframe').waitFor({ state: 'visible' });
-}
+  private readonly btnFirstBuyTicket: Locator;
 
-    getifrVideo(): Locator {
-        return this.ifrVideo;
-    }
+  constructor(page: Page) {
+    super(page);
 
-    async playMovieTrailer() {
-        await this.playTrailer();
-        await this.clickPlay();
-    }
-    // async clickRandomMovieAndPlay() {
-    //     await this.playTrailer();
-    //     await this.clickPlay();
-    // }
+    // ===== Video / Trailer =====
+    this.btnPlayTrailer = page.getByRole('button', { name: 'video-button' });
+    this.iframeVideo = page.locator('iframe').contentFrame().locator('video');
 
-    getContainLichChieu(): Locator {
-        return this.ContainLichChieu;
-    }
+    // ===== Sections =====
+    this.sectionLichChieu = page.locator('#lichChieu');
+    this.sectionCumRap = page.locator('#cumRap');
+    this.sectionTinTuc = page.locator('#tinTuc');
+    this.sectionUngDung = page.locator('#ungDung');
 
-    getContainCumRap(): Locator {
-        return this.ContainCumRap;
-    }
+    // ===== Common buttons =====
+    this.btnDaHieu = page.getByRole('button', { name: 'Đã hiểu' });
+    this.btnDangXuat = page.getByRole('link', { name: 'Đăng xuất' });
+    this.btnXacNhanDangXuat = page.getByRole('button', { name: 'Đồng ý' });
+    this.btnHuyDangXuat = page.getByRole('button', { name: 'Hủy' });
+    this.lblDaDangXuat = page.getByRole('heading', { name: 'Đã đăng xuất' });
 
-    getContainTinTuc(): Locator {
-        return this.ContainTinTuc;
-    }
+    this.btnFirstBuyTicket = page
+      .getByRole('link', { name: 'MUA VÉ' })
+      .first();
+  }
 
-    getContainUngDung(): Locator {
-        return this.ContainUngDung;
-    }
+  async clickFirstBuyTicket(): Promise<void> {
+    await expect(this.btnFirstBuyTicket).toBeVisible({ timeout: 15000 });
+    await this.btnFirstBuyTicket.click();
+  }
 
-    getlblMsgFilm(): Locator {
-        return this.lblMsgFilm;
-    }
+  async playFirstMovieTrailer(): Promise<void> {
+    await this.clickFirstBuyTicket();
+    await expect(this.btnPlayTrailer).toBeVisible();
+    await this.btnPlayTrailer.click();
+  }
 
-    getlblMsgCinema(): Locator {
-        return this.lblMsgCinema;
-    }
+ 
+  async logout(): Promise<void> {
+    await this.btnDangXuat.click();
+    await this.btnXacNhanDangXuat.click();
+    await expect(this.lblDaDangXuat).toBeVisible();
+  }
+  getIframeVideo(): Locator {
+    return this.iframeVideo;
+  }
 
-    getlblMsgDate(): Locator {
-        return this.lblMsgDate;
-    }
+  getSectionLichChieu(): Locator {
+    return this.sectionLichChieu;
+  }
 
-    async clickBookTicket(menu: 'Phim' | 'Rạp' | 'Ngày giờ chiếu') {
-        switch (menu) {
-            case 'Phim': this.getSelectFilm(); break;
-            case 'Rạp': this.getSelectCinema(); break;
-            case 'Ngày giờ chiếu': this.getSelectDate(); break;
-        }
-    }
+  getSectionCumRap(): Locator {
+    return this.sectionCumRap;
+  }
 
-    async selectdropdownRandomPhim() {
-        const options = await this.SelectMenuFilm.locator('option:not([disabled])').all();
-        const total = options.length;
-        const randomIndex = Math.floor(Math.random() * total);
-        const randomValue = await options[randomIndex].getAttribute('value');
-        const randomText = (await options[randomIndex].textContent())?.trim() || '';
-        await this.SelectMenuFilm.selectOption(randomValue);
-        return { randomText };
-    }
+  getSectionTinTuc(): Locator {
+    return this.sectionTinTuc;
+  }
 
-    async selectdropdownRandomRap() {
-        const options = await this.SelectMenuCinema.locator('option:not([disabled])').all();
-        const total = options.length;
-        const randomIndex = Math.floor(Math.random() * total);
-        const randomValue = await options[randomIndex].getAttribute('value');
-        const randomText = (await options[randomIndex].textContent())?.trim() || '';
-        await this.SelectMenuCinema.selectOption(randomValue);
-        return { randomText };
-    }
+  getSectionUngDung(): Locator {
+    return this.sectionUngDung;
+  }
 
-    async selectdropdownRandomNgay() {
-        const options = await this.SelectMenuDate.locator('option:not([disabled])').all();
-        const total = options.length;
-        const randomIndex = Math.floor(Math.random() * total);
-        const randomValue = await options[randomIndex].getAttribute('value');
-        const randomText = (await options[randomIndex].textContent())?.trim() || '';
-        await this.SelectMenuDate.selectOption(randomValue);
-        return { randomText };
-    }
-
-    async clickRandomRap() {
-        const rapButtons = this.page.locator('div.MuiTabs-root.MuiTabs-vertical button');
-        const total = await rapButtons.count();
-        const randomIndex = Math.floor(Math.random() * total);
-        console.log(`Random Cụm rạp số: ${randomIndex}`);
-        await rapButtons.nth(randomIndex).click();
-    }
-
-    async clickRandomChiTietRap() {
-        const chitietrapButtons = this.page.locator('div[id*="vertical-tabpanel-"] button');
-        const totalRap = await chitietrapButtons.count();
-        const randomIndexRap = Math.floor(Math.random() * totalRap);
-        console.log(`Random Chi nhánh rạp số: ${randomIndexRap}`);
-        await chitietrapButtons.nth(randomIndexRap).click();
-    }
-
-    async clickRandomLichchieu() {
-        const lichchieuButtons = this.page.locator('div.MuiBox-root [class*="jss"] a[href*="/purchase"]');
-        const totalLichchieu = await lichchieuButtons.count();
-        const randomIndexLichchieu = Math.floor(Math.random() * totalLichchieu);
-        console.log(`Random xuất chiếu số: ${randomIndexLichchieu}`);
-        await lichchieuButtons.nth(randomIndexLichchieu).click();
-    }
+  getLogoutMessage(): Locator {
+    return this.lblDaDangXuat;
+  }
 }

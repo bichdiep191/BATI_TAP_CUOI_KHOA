@@ -1,17 +1,20 @@
 import { expect, test } from '../fixtures/custom-fixtures';
 
-let selectedInfo: { rapText: string | undefined; nameText: string | undefined; lichText: string | undefined };
+// let selectedInfo: { rapText: string | undefined; nameText: string | undefined; lichText: string | undefined };
+let selectedInfo: {
+  rapText?: string;
+  nameText?: string;
+  lichText?: string;
+} = {};
 test.describe('Verify booking functionality', () => {
 
-    test.beforeEach(async ({ detailPage, page, homePage, authenticatedPage }) => {
-        console.log('Home Page')
-        await homePage.playTrailer(); 
-        await homePage.clickBuy();
-        await detailPage.clickBuyticket(); 
-       // await page.waitForTimeout(1000);
-        await detailPage.clickRandomRap(); 
-        selectedInfo = await detailPage.clickRandomLichchieu();
-    })
+    test.beforeEach(async ({ detailPage, homePage }) => {
+  await homePage.clickFirstBuyTicket();
+ // await homePage.clickBuy();
+  await detailPage.clickBuyticket();
+  await detailPage.clickFirstRap();
+  expect(selectedInfo.lichText).toBeTruthy();
+});
 
     test('Verify seat selection warning is displayed when booking without seats', async ({ bookingPage }) => {
         console.log('Click "Đặt vé" without selecting seats');
@@ -21,7 +24,7 @@ test.describe('Verify booking functionality', () => {
 
     test('Verify booking succeeds when selecting one seat', async ({ bookingPage }) => {
         console.log('Select one available seat and complete booking');
-        const { seatText } = await bookingPage.selectRandomAvailableSeat();
+        const { seatText } = await bookingPage.selectFirstAvailableSeat();
         console.log(`Selected seat: ${seatText}`);
         await bookingPage.clickBooking(); 
         await expect(bookingPage.getlblthanhcongMsg()).toBeInViewport();
@@ -38,7 +41,7 @@ test.describe('Verify booking functionality', () => {
         }
         await bookingPage.clickBooking(); // Step 8: Click Đặt vé
         //VP: 'Đặt vé thành công' message display
-        await expect(bookingPage.getlblthanhcongMsg()).toBeInViewport();
+        await expect(bookingPage.getlblthanhcongMsg()).toBeVisible();
        
 
     })

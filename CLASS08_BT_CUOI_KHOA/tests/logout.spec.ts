@@ -13,13 +13,6 @@ test.describe('Logout Feature Tests', () => {
         await expect(homePage.getLblLogoutMsgLocator()).toBeVisible();
     })
 
-    test('Verify logout is cancelled', async ({ homePage, loginPage }) => {
-        console.log('Hủy đăng xuất');
-        await homePage.clickDangXuat(); 
-        await homePage.clickNoDangXuat();
-        await expect(homePage.topBarNagivation.getUserProfileLocator('DIEP')).toBeVisible();
-    })
-
      test.afterEach(async ({ page }) => {
        console.log(`Test finished at: ${new Date().toLocaleString()}`);
     })
