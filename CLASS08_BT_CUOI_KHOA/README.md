@@ -32,9 +32,6 @@ Dự án tập trung vào việc:
 | Playwright             | Framework kiểm thử tự động E2E |
 | TypeScript             | Ngôn ngữ lập trình             |
 | Node.js                | Môi trường chạy                |
-| Page Object Model      | Mô hình thiết kế automation    |
-| Playwright Test Runner | Chạy test và tạo report        |
-| HTML Report            | Báo cáo kết quả test           |
 
 ---
 
@@ -160,9 +157,9 @@ npx playwright show-report
 
 ## 9. Thông tin học viên
 
-* **Học viên:** *Nguyễn Thị Diệp*
+* **Học viên:** *Nguyễn Thị Thu Tâm & Nguyễn Thị Diệp*
 * **Khóa học:** Automation Testing – Cybersoft
-* **Dự án:** Final Project
+* **Dự án:** Cybersoft Automation Testing Final Project – Playwright
 
 ---
 
